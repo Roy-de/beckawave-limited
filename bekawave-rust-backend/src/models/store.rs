@@ -1,9 +1,17 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Store{
-    pub id: Uuid,
+    pub store_id: i32,
     pub name: String,
     pub location: String
+}
+
+pub fn build_store( name: String, location: String) -> Store {
+
+    Store{
+        store_id: 0,
+        name,
+        location
+    }
 }
