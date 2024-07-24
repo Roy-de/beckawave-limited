@@ -1,11 +1,13 @@
-mod models;
-mod services;
-mod schemas;
-
 #[macro_use]
 extern crate rocket;
-use rocket::{routes};
+use rocket::routes;
 use sqlx::{Executor, PgPool};
+
+use crate::controllers::*;
+
+mod models;
+mod services;
+mod controllers;
 
 #[shuttle_runtime::main]
 async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::ShuttleRocket {
@@ -15,7 +17,8 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::
         .expect("Unable to connect and execute the query :( ");
 
     let rocket = rocket::build()
-        .mount("/", routes![]);
+        .manage(pool)
+        .mount("/", routes![get_all_stores]);
 
     Ok(rocket.into())
 }

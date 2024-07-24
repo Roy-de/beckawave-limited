@@ -1,10 +1,17 @@
+use async_graphql::InputObject;
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, FromRow)]
 pub struct Store{
     pub store_id: i32,
     pub name: String,
     pub location: String
+}
+#[derive(InputObject)]
+pub struct NewStore {
+    pub name: String,
+    pub location: String,
 }
 
 pub fn build_store( name: String, location: String) -> Store {

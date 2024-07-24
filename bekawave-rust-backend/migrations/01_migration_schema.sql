@@ -22,9 +22,9 @@ DROP TABLE IF EXISTS public.customer;
 CREATE TABLE IF NOT EXISTS public.customer
 (
     customer_id bigserial NOT NULL,
-    name character varying[] COLLATE pg_catalog."default" NOT NULL,
-    phone_no character varying[] COLLATE pg_catalog."default" NOT NULL,
-    location character varying[] COLLATE pg_catalog."default" NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    phone_no character varying COLLATE pg_catalog."default" NOT NULL,
+    location character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT customer_pkey PRIMARY KEY (customer_id)
 );
 
@@ -33,8 +33,8 @@ DROP TABLE IF EXISTS public.debt;
 CREATE TABLE IF NOT EXISTS public.debt
 (
     debt_id bigserial NOT NULL,
-    customer_id bigint[] NOT NULL,
-    amount bigint[] NOT NULL,
+    customer_id bigint NOT NULL,
+    amount bigint NOT NULL,
     date date NOT NULL,
     paid_date date,
     is_paid boolean NOT NULL DEFAULT false,
@@ -46,8 +46,8 @@ DROP TABLE IF EXISTS public.product;
 CREATE TABLE IF NOT EXISTS public.product
 (
     product_id bigserial NOT NULL,
-    name character varying[] COLLATE pg_catalog."default" NOT NULL,
-    price bigint[] NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    price bigint NOT NULL,
     CONSTRAINT product_pkey PRIMARY KEY (product_id)
 );
 
@@ -56,13 +56,13 @@ DROP TABLE IF EXISTS public.sales;
 CREATE TABLE IF NOT EXISTS public.sales
 (
     sales_id bigserial NOT NULL,
-    customer_id bigint[] NOT NULL,
-    sales_pair_id bigint[],
-    sales_rep_id bigint[],
-    total_price character varying[] COLLATE pg_catalog."default" NOT NULL,
+    customer_id bigint NOT NULL,
+    sales_pair_id bigint,
+    sales_rep_id bigint,
+    total_price character varying COLLATE pg_catalog."default" NOT NULL,
     sales_time date NOT NULL,
-    product_id bigint[] NOT NULL,
-    product_quantity bigint[] NOT NULL,
+    product_id bigint NOT NULL,
+    product_quantity bigint NOT NULL,
     CONSTRAINT sales_pkey PRIMARY KEY (sales_id)
 );
 
@@ -71,8 +71,8 @@ DROP TABLE IF EXISTS public.sales_pair;
 CREATE TABLE IF NOT EXISTS public.sales_pair
 (
     sales_pair_id bigserial NOT NULL,
-    sales_rep_id_one bigint[] NOT NULL,
-    sales_rep_id_two bigint[] NOT NULL,
+    sales_rep_id_one bigint NOT NULL,
+    sales_rep_id_two bigint NOT NULL,
     CONSTRAINT sales_pair_pkey PRIMARY KEY (sales_pair_id)
 );
 
@@ -81,8 +81,8 @@ DROP TABLE IF EXISTS public.sales_rep;
 CREATE TABLE IF NOT EXISTS public.sales_rep
 (
     sales_rep_id bigserial NOT NULL,
-    name character varying[] COLLATE pg_catalog."default" NOT NULL,
-    phone_no character varying[] COLLATE pg_catalog."default" NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    phone_no character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT sales_rep_pkey PRIMARY KEY (sales_rep_id)
 );
 
@@ -91,11 +91,11 @@ DROP TABLE IF EXISTS public.stock_record;
 CREATE TABLE IF NOT EXISTS public.stock_record
 (
     stock_id bigserial NOT NULL,
-    store_id bigint[] NOT NULL,
-    amount bigint[] NOT NULL,
-    product_id bigint[] NOT NULL,
-    quantity bigint[] NOT NULL,
-    product_worth bigint[] NOT NULL,
+    store_id bigint NOT NULL,
+    amount bigint NOT NULL,
+    product_id bigint NOT NULL,
+    quantity bigint NOT NULL,
+    product_worth bigint NOT NULL,
     CONSTRAINT stock_record_pkey PRIMARY KEY (stock_id)
 );
 
@@ -104,8 +104,8 @@ DROP TABLE IF EXISTS public.store;
 CREATE TABLE IF NOT EXISTS public.store
 (
     store_id bigserial NOT NULL,
-    name character varying[] COLLATE pg_catalog."default" NOT NULL,
-    location character varying[] COLLATE pg_catalog."default" NOT NULL,
+    name bigint NOT NULL,
+    location character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT store_pkey PRIMARY KEY (store_id)
 );
 

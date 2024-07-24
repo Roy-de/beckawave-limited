@@ -1,7 +1,8 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Debt{
     pub debt_id: i32,
     pub customer_id: i32,

@@ -1,7 +1,8 @@
 use rocket::serde::Serialize;
 use rocket::serde::Deserialize;
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct SalesPair {
     pub sales_pair_id: i32,
     pub sales_rep_id_one: i32,

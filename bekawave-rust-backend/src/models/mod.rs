@@ -1,11 +1,16 @@
 pub mod stock;
 pub mod store;
 mod debt;
-mod salesRep;
+mod sales_rep;
 mod product;
-mod salesPair;
+mod sales_pair;
 mod customer;
 mod sales;
 
-pub use stock::Stock;
-pub use store::Store;
+pub use stock::*;
+pub use store::*;
+pub use sales_pair::*;
+pub use debt::*;
+pub use sales_rep::*;
+pub use customer::*;
+pub use sales::*;
