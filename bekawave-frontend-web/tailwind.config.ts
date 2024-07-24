@@ -8,7 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
-
+      fontFamily: {
+        inknut: ['"Inknut Antiqua"', 'serif'],
+        lexend: ['lexend', 'sans-serif'],
+      },
     },
   },
   plugins: [],
