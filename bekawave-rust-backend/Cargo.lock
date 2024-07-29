@@ -318,6 +318,7 @@ dependencies = [
  "async-graphql-rocket",
  "chrono",
  "dotenv",
+ "log",
  "rocket",
  "serde",
  "serde_json",

@@ -3,7 +3,7 @@ use sqlx::FromRow;
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct SalesRep {
-    pub sales_rep_id: i32,
+    pub sales_rep_id: i64,
     pub name: String,
     pub phone_no: String
 }

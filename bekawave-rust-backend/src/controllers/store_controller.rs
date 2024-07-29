@@ -3,15 +3,10 @@ use rocket::response::status::Created;
 use rocket::serde::json::Json;
 use rocket::State;
 use sqlx::{PgPool};
-use crate::models::Store;
+use crate::models::{ErrorResponse, Store};
 use crate::services::{StoreError, StoreService};
 use tracing::info;
 
-
-#[derive(serde::Serialize)]
-struct ErrorResponse {
-    message: String,
-}
 
 pub async fn store_service_init(pool: &PgPool) -> StoreService {
         StoreService::new(pool.clone()).await
@@ -76,7 +71,10 @@ pub async fn create_store(store_service: &State<StoreService>, store: Json<Store
 #[put("/stores/update", data = "<store>")]
 pub async fn update_store(store_service: &State<StoreService>, store: Json<Store>) -> Result<Json<Store>, (Status, Json<ErrorResponse>)> {
     match store_service.update_store(store.into_inner()).await {
-        Ok(Some(updated_store)) => Ok(Json(updated_store)),
+        Ok(Some(updated_store)) => {
+            info!("Successfully updated store info");
+            Ok(Json(updated_store))
+        },
         Ok(None) => Err((Status::NotFound, Json(ErrorResponse {message: "Store not found".to_string()}))),
         Err(e) => {
             info!("Failed to update store: {:?}", e);
@@ -89,15 +87,15 @@ pub async fn delete_store(store_service: &State<StoreService>, store_id: i32) ->
     match store_service.delete_store(store_id).await {
         Ok(deleted_store) => {
             if deleted_store > 0 {
-                info!("Deleted store with id: {}", store_id);
-                Ok(Json(store_id as usize))
+                info!("Deleted store");
+                Ok(Json(deleted_store))
             } else {
-                info!("No such store found with id: {}", store_id);
+                info!("No such store found");
                 Err((Status::NotFound, Json(ErrorResponse { message: "No such store found".to_string() })))
             }
         }
         Err(StoreError::NotFound) => {
-            info!("No such store found with id: {}", store_id);
+            info!("No such store found");
             Err((Status::NotFound, Json(ErrorResponse { message: "No such store found".to_string() })))
         }
         Err(e) => {
