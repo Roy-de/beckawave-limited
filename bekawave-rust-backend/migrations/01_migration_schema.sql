@@ -104,7 +104,7 @@ DROP TABLE IF EXISTS public.store;
 CREATE TABLE IF NOT EXISTS public.store
 (
     store_id bigserial NOT NULL,
-    name bigint NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
     location character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT store_pkey PRIMARY KEY (store_id)
 );

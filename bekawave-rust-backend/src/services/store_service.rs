@@ -1,12 +1,21 @@
 use sqlx::{Error, PgPool};
 use crate::models::store::Store;
 use tracing::info;
+use thiserror::Error;
 
 /// A service for managing `Store` entities in a PostgreSQL database.
 pub struct StoreService {
     pool: PgPool
 }
-
+#[derive(Error, Debug)]
+pub enum StoreError {
+    #[error("Duplicate store found")]
+    DuplicateStore,
+    #[error(transparent)]
+    SqlxError(#[from] sqlx::Error),
+    #[error("Store not found")]
+    NotFound,
+}
 impl StoreService {
     /// Creates a new `StoreService` instance.
     ///
@@ -59,8 +68,19 @@ impl StoreService {
     /// let created_store = store_service.create_store(new_store).await.unwrap();
     /// # };
     /// ```
-    pub async fn create_store(&self, store: Store) -> Result<Store, Error> {
+    pub async fn create_store(&self, store: Store) -> Result<Store, StoreError> {
         info!("Attempting to create a new store with name: {} and location: {}", store.name, store.location);
+        let check_query = "SELECT 1 FROM public.store WHERE name = $1 AND location = $2 LIMIT 1";
+        let existing_store: Option<(i32,)> = sqlx::query_as(check_query)
+            .bind(&store.name)
+            .bind(&store.location)
+            .fetch_optional(&self.pool)
+            .await?;
+
+        if existing_store.is_some() {
+            info!("Store with name: {} and location: {} already exists", store.name, store.location);
+            return Err(StoreError::DuplicateStore);
+        }
         let query = "INSERT INTO public.store (name, location) VALUES ( $1, $2 ) RETURNING store_id, name, location";
         let store_out = sqlx::query_as::<_, Store>(query)
             .bind(store.name)
@@ -135,7 +155,7 @@ impl StoreService {
     /// let result = store_service.update_store(updated_store).await.unwrap();
     /// # };
     /// ```
-    pub async fn update_store(&self, store: Store) -> Result<Store, Error> {
+    pub async fn update_store(&self, store: Store) -> Result<Option<Store>, Error> {
         info!("Attempting to update store with ID: {}.", store.store_id);
 
         let query = "UPDATE public.store SET name = $1, location = $2 WHERE store_id = $3 RETURNING store_id, name, location";
@@ -144,7 +164,7 @@ impl StoreService {
             .bind(store.name)
             .bind(store.location)
             .bind(store.store_id)
-            .fetch_one(&self.pool)
+            .fetch_optional(&self.pool)
             .await?;
 
         Ok(updated_store)
@@ -212,9 +232,21 @@ impl StoreService {
     /// assert_eq!(rows_affected, 1);
     /// # };
     /// ```
-    pub async fn delete_store(&self, id: i32) -> Result<usize, Error> {
+    pub async fn delete_store(&self, id: i32) -> Result<usize, StoreError> {
         info!("Attempting to delete store with ID: {}.", id);
 
+        // Check if the store exists
+        let check_query = "SELECT 1 FROM public.store WHERE store_id = $1 LIMIT 1";
+        let existing_store: Option<(i32,)> = sqlx::query_as(check_query)
+            .bind(id)
+            .fetch_optional(&self.pool)
+            .await?;
+
+        if existing_store.is_none() {
+            return Err(StoreError::NotFound);
+        }
+
+        // Proceed with deletion
         let query = "DELETE FROM public.store WHERE store_id = $1";
 
         let rows_affected = sqlx::query(query)

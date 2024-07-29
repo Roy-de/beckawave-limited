@@ -9,8 +9,8 @@ mod sales;
 
 pub use stock::*;
 pub use store::*;
-pub use sales_pair::*;
-pub use debt::*;
-pub use sales_rep::*;
-pub use customer::*;
-pub use sales::*;
+// pub use sales_pair::*;
+// pub use debt::*;
+// pub use sales_rep::*;
+// pub use customer::*;
+// pub use sales::*;

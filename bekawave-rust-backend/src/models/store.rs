@@ -4,7 +4,7 @@ use sqlx::FromRow;
 
 #[derive(Deserialize, Serialize, Debug, FromRow)]
 pub struct Store{
-    pub store_id: i32,
+    pub store_id: i64,
     pub name: String,
     pub location: String
 }

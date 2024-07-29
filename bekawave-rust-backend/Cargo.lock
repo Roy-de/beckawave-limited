@@ -325,6 +325,7 @@ dependencies = [
  "shuttle-runtime",
  "shuttle-shared-db",
  "sqlx",
+ "thiserror",
  "tokio",
  "tracing",
 ]
