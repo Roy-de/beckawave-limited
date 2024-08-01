@@ -11,7 +11,7 @@ use crate::models::{ErrorResponse, SalesRep};
 pub async fn sales_rep_init(pool: &PgPool) -> SalesRepService {
     SalesRepService::new(pool.clone()).await
 }
-#[get("/sales-reps/all-reps")]
+#[get("/sales-reps/all")]
 pub async fn get_all_sales_reps(sales_rep_service: &State<SalesRepService>) -> Result<Json<Vec<SalesRep>>, (Status, Json<ErrorResponse>)> {
     match sales_rep_service.get_all_sales_reps().await {
         Ok(sales_reps) => {

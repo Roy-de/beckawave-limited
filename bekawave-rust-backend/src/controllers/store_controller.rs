@@ -34,7 +34,7 @@ pub async fn get_all_stores(store_service: &State<StoreService>) -> Result<Json<
     }
 }
 #[get("/stores/get_store_by_id/<store_id>")]
-pub async fn get_store_by_id(store_service: &State<StoreService>, store_id: i32) -> Result<Json<Store>, (Status, Json<ErrorResponse>)> {
+pub async fn get_store(store_service: &State<StoreService>, store_id: i32) -> Result<Json<Store>, (Status, Json<ErrorResponse>)> {
     match store_service.get_store(store_id).await {
         Ok(store) => {
             info!("Successfully retrieved a stores");
@@ -83,24 +83,25 @@ pub async fn update_store(store_service: &State<StoreService>, store: Json<Store
     }
 }
 #[delete("/stores/delete/<store_id>")]
-pub async fn delete_store(store_service: &State<StoreService>, store_id: i32) -> Result<Json<usize>, (Status, Json<ErrorResponse>)> {
+pub async fn delete_store(store_service: &State<StoreService>, store_id: i32, ) -> Result<Json<usize>, (Status, Json<ErrorResponse>)> {
     match store_service.delete_store(store_id).await {
         Ok(deleted_store) => {
             if deleted_store > 0 {
-                info!("Deleted store");
-                Ok(Json(deleted_store))
+                info!("Deleted store with ID {}", store_id);
+                Ok(Json(deleted_store)) // Return the number of affected rows
             } else {
-                info!("No such store found");
+                info!("No store found with ID {}", store_id);
                 Err((Status::NotFound, Json(ErrorResponse { message: "No such store found".to_string() })))
             }
         }
-        Err(StoreError::NotFound) => {
-            info!("No such store found");
-            Err((Status::NotFound, Json(ErrorResponse { message: "No such store found".to_string() })))
-        }
         Err(e) => {
-            info!("Error deleting store with id: {:?}: {:?}", store_id, e);
-            Err((Status::InternalServerError, Json(ErrorResponse { message: "Error deleting store".to_string() })))
+            info!("Error deleting store with ID {}: {:?}", store_id, e);
+            let status = if matches!(e, StoreError::NotFound) {
+                Status::NotFound
+            } else {
+                Status::InternalServerError
+            };
+            Err((status, Json(ErrorResponse { message: "Error deleting store".to_string() })))
         }
     }
 }

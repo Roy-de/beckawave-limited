@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public.debt
     debt_id bigserial NOT NULL,
     customer_id bigint NOT NULL,
     amount bigint NOT NULL,
-    date date NOT NULL,
+    customer_date date NOT NULL,
     paid_date date,
     is_paid boolean NOT NULL DEFAULT false,
     CONSTRAINT debt_pkey PRIMARY KEY (debt_id)
@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS public.sales_pair
     sales_pair_id bigserial NOT NULL,
     sales_rep_id_one bigint NOT NULL,
     sales_rep_id_two bigint NOT NULL,
+    paired_date date NOT NULL,
     CONSTRAINT sales_pair_pkey PRIMARY KEY (sales_pair_id)
 );
 
