@@ -2,11 +2,31 @@
 extern crate rocket;
 use sqlx::{Executor, PgPool};
 use crate::controllers::*;
-
+use rocket::http::Method;
+use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
 mod models;
 mod services;
 mod controllers;
 
+fn make_cors() -> Cors {
+    let allowed_origins = AllowedOrigins::some_exact(&[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ]);
+    CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![Method::Get,Method::Post,Method::Put, Method::Delete, Method::Options].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::some(&[
+            "Authorization",
+            "Accept",
+            "Content-Type",
+            "Access-Control-Allow-Origin",
+        ]),
+        allow_credentials: false,
+        ..Default::default()
+    }
+        .to_cors().expect("Error while building Cors")
+}
 #[shuttle_runtime::main]
 async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::ShuttleRocket {
     let customer_service = customer_service_init(&pool).await;
@@ -23,6 +43,7 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::
         .expect("Unable to connect and execute the query :( ");
 
     let rocket = rocket::build()
+        .attach(make_cors())
         .manage(pool)
         .manage(store_service)
         .manage(sales_rep_service)

@@ -13,7 +13,7 @@ use sqlx::FromRow;
 /// - `is_paid`: A boolean indicating whether the debt has been paid or not.
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Debt {
-    pub debt_id: i32,
+    pub debt_id: i64,
     pub customer_id: i32,
     pub amount: i32,
     pub customer_date: NaiveDateTime,

@@ -36,7 +36,7 @@ use sqlx::FromRow;
 /// - The `stock_id` field is initialized to `0` in the `build_stock` function and should be updated with a value assigned by the database after insertion.
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Stock {
-    pub stock_id: i32,
+    pub stock_id: i64,
     pub store_id: i32,
     pub amount: i32,
     pub product_id: i32,

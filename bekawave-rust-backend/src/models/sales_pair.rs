@@ -33,7 +33,7 @@ use sqlx::FromRow;
 /// - The `sales_pair_id` field is initialized to `0` in the `build_sales_rep_pair` function and should be updated with a value assigned by the database after insertion.
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct SalesPair {
-    pub sales_pair_id: i32,
+    pub sales_pair_id: i64,
     pub sales_rep_id_one: i32,
     pub sales_rep_id_two: i32,
     pub paired_date: NaiveDateTime,

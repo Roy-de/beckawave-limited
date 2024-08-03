@@ -10,7 +10,7 @@ use sqlx::FromRow;
 /// - `location`: The location of the customer.
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Customer {
-    pub customer_id: i32,
+    pub customer_id: i64,
     pub name: String,
     pub phone_no: String,
     pub location: String
