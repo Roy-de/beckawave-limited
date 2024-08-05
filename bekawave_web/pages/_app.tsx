@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 
 import { fontSans, fontMono } from "@/config/fonts";
 import "@/styles/globals.css";
+import { ModalProvider } from "@/context/ModalContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider>
-        <Component {...pageProps} />
+        <ModalProvider>
+          <Component {...pageProps} />
+        </ModalProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );

@@ -1,25 +1,22 @@
 import React from "react";
 
-import bgImage from "../public/background.jpeg";
+import { ModalProvider, useModal } from "@/context/ModalContext";
 
-export default function DefaultLayout({
+const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}) => {
+  const { isModalOpen, modalContent } = useModal();
+
   return (
-    <div
-      className="flex flex-col h-screen w-screen"
-      style={{
-        backgroundImage: `url(${bgImage.src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        height: "100vh",
-        width: "100vw",
-      }}
-    >
-      <main>{children}</main>
+    <div className="relative flex flex-col h-screen w-screen bg-gradient-to-tr from-[#0e1c35] via-black to-[#1a032a]">
+      <div
+        className={`transition-all duration-300 ${isModalOpen ? "bg-slate-950 bg-opacity-95 blur-sm" : ""}`}
+      >
+        <main>{children}</main>
+        <ModalProvider>{modalContent}</ModalProvider>
+      </div>
     </div>
   );
-}
+};
+
+export default DefaultLayout;

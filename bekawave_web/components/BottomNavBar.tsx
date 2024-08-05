@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
+  HandCoinsIcon,
   HomeIcon,
   SearchIcon,
-  SettingsIcon,
   UserRound,
   WalletCards,
 } from "lucide-react";
@@ -21,13 +21,12 @@ const Items: React.FC<ItemsProps> = ({ icon, label, isSelected, onClick }) => {
     <Button
       className={`${
         isSelected
-          ? "bg-blue-700 text-white shadow-blue-700 text-sm font-bold"
-          : "bg-transparent text-black shadow-none"
+          ? "bg-blue-600 text-white text-sm font-bold"
+          : "bg-transparent text-white text-xs shadow-none"
       }`}
       isIconOnly={false}
       radius="md"
       size="sm"
-      variant="shadow"
       onClick={onClick}
     >
       {icon} {label}
@@ -35,15 +34,21 @@ const Items: React.FC<ItemsProps> = ({ icon, label, isSelected, onClick }) => {
   );
 };
 
-const BottomNavBar = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+interface BottomNavBarProps {
+  selected: string;
+  setSelected: (label: string) => void;
+}
 
+const BottomNavBar: React.FC<BottomNavBarProps> = ({
+  selected,
+  setSelected,
+}) => {
   const handleClick = (label: string) => {
     setSelected(label);
   };
 
   return (
-    <div className="fixed bottom-2 bg-white p-2 rounded-2xl left-1/2 transform -translate-x-1/2 flex justify-center gap-5 items-center drop-shadow-lg">
+    <div className="fixed bottom-2 bg-slate-900 border border-slate-800 bg-opacity-65 backdrop-blur-3xl p-1.5 rounded-2xl left-1/2 transform -translate-x-1/2 flex justify-center gap-5 items-center drop-shadow-lg shadow-2xl">
       <Items
         icon={<HomeIcon size={16} />}
         isSelected={selected === "Home"}
@@ -63,6 +68,12 @@ const BottomNavBar = () => {
         onClick={() => handleClick("Customers")}
       />
       <Items
+        icon={<HandCoinsIcon size={16} />}
+        isSelected={selected === "Sales"}
+        label={"Sales"}
+        onClick={() => handleClick("Sales")}
+      />
+      <Items
         icon={<Box size={16} />}
         isSelected={selected === "Inventory"}
         label="Inventory"
@@ -74,12 +85,13 @@ const BottomNavBar = () => {
         label="Wallet"
         onClick={() => handleClick("Wallet")}
       />
+      {/*
       <Items
         icon={<SettingsIcon size={16} />}
         isSelected={selected === "Settings"}
         label="Settings"
         onClick={() => handleClick("Settings")}
-      />
+      />*/}
     </div>
   );
 };
