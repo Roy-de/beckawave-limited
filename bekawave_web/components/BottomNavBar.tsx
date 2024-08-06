@@ -54,13 +54,13 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
         isSelected={selected === "Home"}
         label="Home"
         onClick={() => handleClick("Home")}
-      />
+      />{/*
       <Items
         icon={<SearchIcon size={16} />}
         isSelected={selected === "Search"}
         label="Search"
         onClick={() => handleClick("Search")}
-      />
+      />*/}
       <Items
         icon={<UserRound size={16} />}
         isSelected={selected === "Customers"}
@@ -79,19 +79,6 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
         label="Inventory"
         onClick={() => handleClick("Inventory")}
       />
-      <Items
-        icon={<WalletCards size={16} />}
-        isSelected={selected === "Wallet"}
-        label="Wallet"
-        onClick={() => handleClick("Wallet")}
-      />
-      {/*
-      <Items
-        icon={<SettingsIcon size={16} />}
-        isSelected={selected === "Settings"}
-        label="Settings"
-        onClick={() => handleClick("Settings")}
-      />*/}
     </div>
   );
 };

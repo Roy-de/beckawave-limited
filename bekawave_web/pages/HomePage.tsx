@@ -6,7 +6,8 @@ import DefaultLayout from "@/layouts/default";
 import CustomerPage from "@/pages/CustomerPage";
 import InventoryPage from "@/pages/InventoryPage";
 import { StoreProvider } from "@/context/StoreContext";
-import { ModalProvider } from "@/context/ModalContext";
+import { CustomerProvider } from "@/context/CustomerContext";
+import Sidebar from "@/components/Sidebar";
 
 const HomePage = () => {
   const [selected, setSelected] = useState<string>("Home");
@@ -22,7 +23,11 @@ const HomePage = () => {
       </div>
     </div>
   );
-  const Customers = () => <CustomerPage />;
+  const Customers = () => (
+    <CustomerProvider>
+      <CustomerPage />
+    </CustomerProvider>
+  );
   const Inventory = () => (
     <StoreProvider>
       <InventoryPage />
@@ -88,8 +93,10 @@ const HomePage = () => {
           </span>
         </div>
         <div
-          className={`col-start-1 row-start-2 row-span-full bg-slate-600 bg-opacity-20 backdrop-blur-3xl rounded-lg drop-shadow-lg p-2`}
-        />
+          className={`col-start-1 row-start-2 row-span-full bg-slate-600 bg-opacity-20 backdrop-blur-3xl rounded-lg drop-shadow-lg`}
+        >
+          <Sidebar />
+        </div>
         <div
           className={`col-start-2 row-start-1 col-span-4 row-span-full bg-slate-600 p-3 bg-opacity-20 backdrop-blur-3xl rounded-lg drop-shadow-lg`}
         >

@@ -10,8 +10,8 @@ import {
 } from "@nextui-org/react";
 import { EllipsisVertical, Plus } from "lucide-react";
 
-import { useStore } from "@/context/StoreContext";
-import StockTable from "@/pages/StockTable";
+import { StoreProvider, useStore } from "@/context/StoreContext";
+import StockTable from "@/components/Tables/StockTable";
 import { useModal } from "@/context/ModalContext";
 import StoreForm from "@/components/forms/StoreForm";
 import { Store } from "@/types/types";
@@ -109,7 +109,9 @@ const InventoryPage = () => {
 
   const handleNewStoreClick = () => {
     openModal(
-      <StoreForm onClose={closeModal} onSubmit={handleNewStoreSubmit} />,
+      <StoreProvider>
+        <StoreForm onClose={closeModal} onSubmit={handleNewStoreSubmit} />
+      </StoreProvider>,
     );
   };
   const handleStoreCardClick = (store: Store) => {

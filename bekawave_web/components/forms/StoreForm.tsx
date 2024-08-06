@@ -33,6 +33,7 @@ const StoreForm: React.FC<{
             }
             id="name"
             placeholder={"name"}
+            required={true}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -45,6 +46,7 @@ const StoreForm: React.FC<{
             }
             id="location"
             placeholder={"location"}
+            required={true}
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}

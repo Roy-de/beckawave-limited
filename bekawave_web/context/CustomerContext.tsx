@@ -153,10 +153,7 @@ export const CustomerProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   const deleteCustomer = useCallback(async (id: number) => {
     try {
-      const response = await axios.delete(
-        `${BACKEND_URL}customer/delete/${id}`,
-      );
-
+      await axios.delete(`${BACKEND_URL}customer/delete/${id}`);
       dispatch({ type: "DELETE_CUSTOMER", payload: id });
     } catch (error) {
       console.error("Error deleting customer: ", error);
@@ -192,7 +189,7 @@ export const CustomerProvider: React.FC<{ children: React.ReactNode }> = ({
  *     useCustomerContext Hook: Provides a convenient way to use the customer context in components.
  */
 
-export const useCustomerContext = (): CustomerContextProps => {
+export const useCustomer = (): CustomerContextProps => {
   const context = useContext(CustomerContext);
 
   if (!context)

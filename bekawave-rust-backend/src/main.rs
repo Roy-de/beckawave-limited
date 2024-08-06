@@ -38,7 +38,7 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::
     let store_service = store_service_init(&pool).await;
     let sales_rep_service = sales_rep_init(&pool).await;
 
-    pool.execute(include_str!("../migrations/01_migration_schema.sql"))
+    pool.execute(include_str!("../migrations/0002_02_validate_db.sql"))
         .await
         .expect("Unable to connect and execute the query :( ");
 
