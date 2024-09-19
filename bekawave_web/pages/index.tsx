@@ -1,12 +1,10 @@
 import DefaultLayout from "@/layouts/default";
-import HomePage from "@/pages/HomePage";
-import LoadingPage from "@/pages/LoadingPage";
+import DashBoard from "@/pages/DashBoard";
 
 export default function IndexPage() {
   return (
     <DefaultLayout>
-      <HomePage />
-      {/*<LoadingPage />*/}
+      <DashBoard />
     </DefaultLayout>
   );
 }

@@ -20,3 +20,6 @@ tracing = "0.1.40"
 thiserror = "1.0.63"
 log = "0.4.22"
 rocket_cors = "0.6.0"
+csv = "1.1"
+umya-spreadsheet = "2.0.2"
+

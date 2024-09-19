@@ -29,7 +29,7 @@ use sqlx::FromRow;
 pub struct Product {
     pub product_id: i64,
     pub name: String,
-    pub price: i32,
+    pub price: i64,
 }
 
 /// Constructs a new `Product` instance.
@@ -59,7 +59,7 @@ pub struct Product {
 ///
 /// # Notes
 /// - The `product_id` field is initialized to `0` and should be updated with a value assigned by the database after insertion.
-pub fn build_product(name: String, price: i32) -> Product {
+pub fn build_product(name: String, price: i64) -> Product {
     Product {
         product_id: 0,
         name,

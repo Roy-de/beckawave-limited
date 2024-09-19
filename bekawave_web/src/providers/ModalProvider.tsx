@@ -1,23 +1,6 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { ReactNode, useState } from "react";
 
-interface ModalContentType {
-  isModalOpen: boolean;
-  openModal: (content: ReactNode) => void;
-  closeModal: () => void;
-  modalContent: ReactNode;
-}
-
-const ModalContext = createContext<ModalContentType | undefined>(undefined);
-
-export const useModal = (): ModalContentType => {
-  const context = useContext(ModalContext);
-
-  if (!context) {
-    throw new Error("useModal must be used within ModalContext");
-  }
-
-  return context;
-};
+import { ModalContext } from "../context/ModalContext";
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

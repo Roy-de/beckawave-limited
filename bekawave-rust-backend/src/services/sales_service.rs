@@ -15,6 +15,8 @@ pub enum SalesError {
     NotFound,
     #[error(transparent)]
     SqlxError(#[from] sqlx::Error),
+    #[error("Unsupported format")]
+    UnsupportedFormat,
 }
 
 impl SalesService {

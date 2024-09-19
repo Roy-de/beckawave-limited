@@ -59,6 +59,7 @@ async fn rocket(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_rocket::
             get_customer, get_store, get_debt, get_sales_rep, get_sales, get_product, get_sales_pair, get_stock,
             update_customer, update_store, update_debt, update_sales_rep, update_sales, update_product, update_sales_pair, update_stock,
             create_customer, create_store, create_debt, create_sales_rep, create_sales, create_product, create_sales_pair, create_stock,
+            download_route
         ]);
 
     Ok(rocket.into())

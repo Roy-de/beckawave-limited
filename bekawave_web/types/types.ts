@@ -15,6 +15,7 @@ export interface Customer {
   phone_no: string;
   location: string;
 }
+
 /**
  * Represents a debt.
  */
@@ -25,9 +26,9 @@ export interface Debt {
   remainingAmount: number;
   paymentStatus: "PAID" | "PARTIALLY_PAID" | "UNPAID";
   customer_date: string; // Debt when the debt was set
-  paid_date: string;
+  paid_date: string | null;
   is_paid: boolean;
-  meansOfPayment?: string;
+  meansOfPayment?: string | null;
 }
 
 /**
@@ -76,6 +77,13 @@ export interface Stock {
   store_id: number;
   amount: number;
   product_id: number;
+  product_name: string;
   quantity: number;
   product_worth: number;
+}
+
+/** Success and error messages */
+export interface Message {
+  type: string | null;
+  message: string | null;
 }

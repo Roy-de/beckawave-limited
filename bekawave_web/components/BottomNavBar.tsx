@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  HandCoinsIcon,
-  HomeIcon,
-  SearchIcon,
-  UserRound,
-  WalletCards,
-} from "lucide-react";
+import { Box, HandCoinsIcon, HomeIcon, UserRound } from "lucide-react";
 import { Button } from "@nextui-org/react";
 
 interface ItemsProps {
@@ -54,7 +47,8 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
         isSelected={selected === "Home"}
         label="Home"
         onClick={() => handleClick("Home")}
-      />{/*
+      />
+      {/*
       <Items
         icon={<SearchIcon size={16} />}
         isSelected={selected === "Search"}

@@ -1,4 +1,5 @@
 import {
+  Baloo_2,
   Fira_Code as FontMono,
   Inter as FontSans,
   Outfit as FontOutfit,
@@ -16,4 +17,8 @@ export const fontMono = FontMono({
 export const fontOutfit = FontOutfit({
   subsets: ["latin"],
   variable: "--font-outfit",
+});
+export const fontBaloo = Baloo_2({
+  subsets: ["latin"],
+  variable: "--baloo",
 });

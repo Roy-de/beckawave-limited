@@ -6,6 +6,7 @@ mod customer_service;
 mod sales_pair_service;
 mod debt_service;
 mod sales_service;
+mod download_file;
 
 pub use stock_service::*;
 pub use store_service::*;
@@ -15,3 +16,4 @@ pub use customer_service::*;
 pub use debt_service::*;
 pub use sales_service::*;
 pub use sales_pair_service::*;
+pub use download_file::*;

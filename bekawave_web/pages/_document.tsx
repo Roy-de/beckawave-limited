@@ -4,7 +4,11 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body className="min-h-screen bg-background font-sans ">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
+      <body className="min-h-screen bg-background font-sans light">
         <Main />
         <NextScript />
       </body>

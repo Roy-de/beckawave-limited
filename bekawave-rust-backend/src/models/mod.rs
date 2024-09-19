@@ -7,6 +7,7 @@ mod sales_pair;
 mod customer;
 mod sales;
 mod error_response;
+mod response;
 
 pub use stock::*;
 pub use store::*;
@@ -17,3 +18,4 @@ pub use debt::*;
 pub use sales_rep::*;
 pub use customer::*;
 pub use sales::*;
+pub use response::*;

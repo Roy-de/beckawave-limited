@@ -14,8 +14,8 @@ pub struct Customer {
     pub name: String,
     pub phone_no: String,
     pub location: String
-}
 
+}
 /// Constructs a new `Customer` instance.
 ///
 /// # Arguments
@@ -46,11 +46,9 @@ pub struct Customer {
 ///
 /// # Notes
 /// - The `customer_id` field is initialized to `0` and should be updated with a value assigned by the database after insertion.
-pub fn build_customer(name: String, phone_no: String, location: String) -> Customer {
-    Customer {
-        customer_id: 0,
-        name,
-        phone_no,
-        location,
+impl Customer {
+    pub fn new(customer_id: i64, name: String, phone_no: String, location: String) -> Self {
+        Self { customer_id, name, phone_no, location }
     }
 }
+
