@@ -5,11 +5,13 @@ import { storeReducer } from "@/src/reducers/StoreReducers";
 import { BACKEND_URL } from "@/pages/api/BACKEND_URL";
 import { Store } from "@/types/types";
 import { StoreContext, initialState } from "@/src/context/StoreContext";
+import { useNotification } from "@/src/context/NotificationContext";
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(storeReducer, initialState);
+  const { dispatch: notificationDispatch } = useNotification();
 
   const fetchStores = useCallback(async () => {
     try {
@@ -17,7 +19,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await response.data;
 
       dispatch({ type: "SET_STORES", payload: data });
-      dispatch({ type: "SET_MESSAGE", payload: "Successfully fetched stores" });
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Successfully fetched stores",
+      });
 
       return data;
     } catch (error) {
@@ -36,14 +41,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       const createdStore = await response.data;
 
       dispatch({ type: "SET_SELECTED_STORE", payload: createdStore });
-      dispatch({
+      notificationDispatch({
         type: "SET_MESSAGE",
-        payload: "Successfully selected a store",
+        payload: "Successfully created a store",
       });
     } catch (error) {
-      dispatch({
+      // @ts-ignore
+      const error_message = error.response.data.message;
+
+      notificationDispatch({
         type: "SET_ERROR",
-        payload: "Error selecting a store",
+        payload: error_message,
       });
     }
   };
@@ -53,12 +61,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await response.data;
 
       dispatch({ type: "DELETE_STORE", payload: data });
-      dispatch({
+      notificationDispatch({
         type: "SET_MESSAGE",
         payload: "Successfully deleted a store",
       });
     } catch (error) {
-      dispatch({
+      notificationDispatch({
         type: "SET_ERROR",
         payload: "Error deleting a store",
       });

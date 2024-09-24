@@ -17,6 +17,9 @@ const NewStore: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
     };
 
     createStore(store).then(() => onBackClick);
+
+    setStoreName("");
+    setStoreLocation("");
   };
 
   return (

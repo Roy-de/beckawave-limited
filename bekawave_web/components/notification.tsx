@@ -22,9 +22,11 @@ const Notification: React.FC = () => {
 
   return (
     <div
-      className={`fixed bottom-5 right-5 w-96 h-12 p-4 rounded shadow-lg ${
-        state.error ? "bg-red-500" : "bg-green-500"
-      } text-white`}
+      className={`fixed top-5 right-5 w-fit h-fit py-4 px-8 rounded-3xl shadow-lg font-bold font-baloo border ${
+        state.error
+          ? "bg-red-100 text-red-500 border-red-500"
+          : "bg-green-100 text-green-500 border-green-500"
+      }`}
     >
       {state.error || state.message}
     </div>

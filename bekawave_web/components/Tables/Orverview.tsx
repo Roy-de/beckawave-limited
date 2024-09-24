@@ -11,10 +11,12 @@ const Overview = () => {
   return (
     <div
       className={
-        "border h-full w-full bg-white rounded-2xl shadow-soft shadow-blue-100 p-4"
+        "border h-fit w-full bg-white rounded-2xl shadow-soft shadow-blue-100 p-4"
       }
     >
-      <div className={"text-center pt-4 items-center flex flex-col justify-center"}>
+      <div
+        className={"text-center pt-4 items-center flex flex-col justify-center"}
+      >
         <span className={"font-baloo px-10 py-1"}>Sales summary</span>
         <PieChart
           colors={["#E3170A", "#06BCC1", "#12263A"]}
@@ -22,7 +24,7 @@ const Overview = () => {
           series={[
             {
               data: data,
-              innerRadius: 5,
+              innerRadius: 20,
               outerRadius: 90,
               paddingAngle: 5,
               cornerRadius: 10,
@@ -35,6 +37,13 @@ const Overview = () => {
             legend: { hidden: true },
           }}
         />
+        <div className={"flex flex-col space-y-2 pb-5"}>
+          {data?.map((item, index) => (
+            <span key={index} className={"font-baloo text-lg"}>
+              {item.label}: {item.value}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
