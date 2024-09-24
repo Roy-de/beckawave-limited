@@ -1,11 +1,12 @@
 import React, { useCallback, useReducer } from "react";
 import axios from "axios";
 
+import { useNotification } from "../context/NotificationContext";
+
 import { customerReducer } from "@/src/reducers/CustomerReducers";
 import { BACKEND_URL } from "@/pages/api/BACKEND_URL";
 import { Customer } from "@/types/types";
 import { initialState, CustomerContext } from "@/src/context/CustomerContext";
-import { useNotification } from "../context/NotificationContext";
 
 interface CustomerProviderProps {
   children: React.ReactNode;

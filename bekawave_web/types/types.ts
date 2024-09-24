@@ -77,7 +77,6 @@ export interface Stock {
   store_id: number;
   amount: number;
   product_id: number;
-  product_name: string;
   quantity: number;
   product_worth: number;
 }

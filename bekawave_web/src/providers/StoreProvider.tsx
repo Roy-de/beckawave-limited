@@ -18,11 +18,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
 
       dispatch({ type: "SET_STORES", payload: data });
       dispatch({ type: "SET_MESSAGE", payload: "Successfully fetched stores" });
+
+      return data;
     } catch (error) {
       dispatch({
         type: "SET_ERROR",
         payload: "Error fetching a store",
       });
+
+      return null;
     }
   }, []);
 

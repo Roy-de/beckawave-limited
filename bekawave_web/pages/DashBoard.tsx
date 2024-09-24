@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import SideNav from "@/components/controls/SideNav";
 import DashBoardPage from "@/pages/DashBoardPage";
 import CustomerPage from "@/pages/CustomerPage";
-import InventoryPage from "@/pages/Inventory/InventoryPage";
+import InventoryPage from "@/pages/InventoryPage";
 import StorePage from "@/pages/StorePage";
 import SalesPage from "@/pages/SalesPage";
 

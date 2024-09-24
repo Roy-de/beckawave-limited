@@ -1,39 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Image, Input } from "@nextui-org/react";
 
-import { useProduct } from "@/src/context/ProductContext";
-import { Product } from "@/types/types";
+import { useStore } from "@/src/context/StoreContext";
+import { Store } from "@/types/types";
 
-const NewProduct: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
-  const { createProducts } = useProduct();
-  const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState<number>(0);
-  const [priceValidation, setPriceValidation] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (price <= 0) {
-      setPriceValidation(true);
-    } else {
-      setPriceValidation(false);
-    }
-  }, [price]);
+const NewStore: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
+  const { createStore } = useStore();
+  const [storeName, setStoreName] = useState<string>("");
+  const [storeLocation, setStoreLocation] = useState<string>("");
 
   const handleSubmit = () => {
-    if (!priceValidation && productName !== undefined) {
-      const product: Product = {
-        product_id: 0,
-        name: productName,
-        price: price,
-      };
+    const store: Store = {
+      store_id: 0,
+      name: storeName,
+      location: storeLocation,
+    };
 
-      createProducts(product);
-      onBackClick();
-    } else {
-      alert("Fill in the correct information");
-    }
+    createStore(store).then(() => onBackClick);
   };
 
-  // @ts-ignore
   return (
     <div
       className={
@@ -43,32 +28,32 @@ const NewProduct: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
       <div className={"space-y-4 flex flex-row text-center items-start"}>
         <div className={"flex flex-col justify-start items-start space-y-6"}>
           <span className={"font-baloo text-3xl font-bold py-10 px-4"}>
-            New Product Information
+            New Store Information
           </span>
           <div className={"space-y-6"}>
             <Input
               className={"w-[640px] h-20"}
               color={"primary"}
               isRequired={true}
-              label={"Product name"}
-              name={"Product name"}
+              label={"Store Name"}
+              name={"Store name"}
               size={"sm"}
               type={"text"}
-              value={productName}
+              value={storeName}
               variant={"underlined"}
-              onChange={(e) => setProductName(e.target.value)}
+              onChange={(e) => setStoreName(e.target.value)}
             />
             <Input
               className={"w-[640px] h-20"}
               color={"primary"}
               isRequired={true}
-              label={"Product price"}
-              name={"Price"}
+              label={"Store Location"}
+              name={"Store location"}
               size={"sm"}
-              type={"number"}
-              value={price.toString()}
+              type={"text"}
+              value={storeLocation}
               variant={"underlined"}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              onChange={(e) => setStoreLocation(e.target.value)}
             />
           </div>
           <div
@@ -100,7 +85,7 @@ const NewProduct: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
             //@ts-ignore
             layout="fill"
             objectFit="cover"
-            src={"/delivery.png"}
+            src={"/store.png"}
           />
         </div>
       </div>
@@ -108,4 +93,4 @@ const NewProduct: React.FC<{ onBackClick: () => void }> = ({ onBackClick }) => {
   );
 };
 
-export default NewProduct;
+export default NewStore;

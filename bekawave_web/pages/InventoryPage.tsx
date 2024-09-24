@@ -4,6 +4,7 @@ import { BreadcrumbItem, Breadcrumbs, Button } from "@nextui-org/react";
 import { ProductProvider } from "@/src/providers/ProductProvider";
 import NewProduct from "@/components/forms/NewProduct";
 import NewInventory from "@/components/forms/NewInventory";
+import { StoreProvider } from "@/src/providers/StoreProvider";
 
 interface InventoryListProps {
   onNewInventoryClick: () => void;
@@ -163,9 +164,11 @@ const InventoryPage: React.FC = () => {
         );
       case "new-inventory":
         return (
-          <ProductProvider>
-            <NewInventory />
-          </ProductProvider>
+          <StoreProvider>
+            <ProductProvider>
+              <NewInventory onBackClick={handleBackClick} />
+            </ProductProvider>
+          </StoreProvider>
         );
       default:
         return (

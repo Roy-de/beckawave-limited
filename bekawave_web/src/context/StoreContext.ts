@@ -9,20 +9,16 @@ export const initialState: StoreState = {
   error: null,
   message: null,
 };
-
-export const StoreContext = createContext<{
+interface StoreContextProps {
   state: StoreState;
   dispatch: React.Dispatch<StoreAction>;
-  fetchStores: () => Promise<void>;
+  fetchStores: () => Promise<Store[] | null>;
   createStore: (store: Store) => Promise<void>;
   deleteStore: (id: number) => Promise<void>;
-}>({
-  state: initialState,
-  dispatch: () => null,
-  fetchStores: async () => {},
-  createStore: async () => {},
-  deleteStore: async () => {},
-});
+}
+export const StoreContext = createContext<StoreContextProps | undefined>(
+  undefined,
+);
 
 export const useStore = () => {
   const context = useContext(StoreContext);
