@@ -19,7 +19,6 @@ import {
 } from "@nextui-org/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 
-import { CustomerProvider } from "@/src/providers/CustomerProvider";
 import { useCustomer } from "@/src/context/CustomerContext";
 import { Customer } from "@/types/types";
 
@@ -31,64 +30,68 @@ type Breadcrumb = {
 interface CustomerListProps {
   onNewCustomerClick: () => void;
 }
-const customerData = [
-  {
-    customerName: "John Doe",
-    phoneNo: "(555) 123-4567",
-    location: "New York, NY",
-    debtAmount: 0.0, // No debt
-  },
-  {
-    customerName: "Jane Smith",
-    phoneNo: "(555) 234-5678",
-    location: "Los Angeles, CA",
-    debtAmount: 150.75, // Amount owed
-  },
-  {
-    customerName: "Emily Johnson",
-    phoneNo: "(555) 345-6789",
-    location: "Chicago, IL",
-    debtAmount: 320.4, // Amount owed
-  },
-  {
-    customerName: "Michael Brown",
-    phoneNo: "(555) 456-7890",
-    location: "Houston, TX",
-    debtAmount: 0.0, // No debt
-  },
-  {
-    customerName: "Jessica Davis",
-    phoneNo: "(555) 567-8901",
-    location: "Phoenix, AZ",
-    debtAmount: 78.95, // Amount owed
-  },
-  {
-    customerName: "John Doe",
-    phoneNo: "(555) 123-4567",
-    location: "New York, NY",
-    debtAmount: 0.0, // No debt
-  },
-  {
-    customerName: "Jane Smith",
-    phoneNo: "(555) 234-5678",
-    location: "Los Angeles, CA",
-    debtAmount: 150.75, // Amount owed
-  },
-  {
-    customerName: "Emily Johnson",
-    phoneNo: "(555) 345-6789",
-    location: "Chicago, IL",
-    debtAmount: 320.4, // Amount owed
-  },
-  {
-    customerName: "Michael Brown",
-    phoneNo: "(555) 456-7890",
-    location: "Houston, TX",
-    debtAmount: 0.0, // No debt
-  },
-];
-
 const CustomerList: React.FC<CustomerListProps> = ({ onNewCustomerClick }) => {
+  const { dispatch, state, updateCustomer, fetchCustomers, deleteCustomer } =
+    useCustomer();
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
+
+  const selectedCustomer = state.selectedCustomer;
+  const customerData = state.customers;
+  const [editMode, isEditMode] = useState<boolean>(false);
+
+  const [selectedName, setSelectedName] = useState(
+    selectedCustomer?.name || "",
+  );
+  const [selectedLocation, setSelectedLocation] = useState(
+    selectedCustomer?.location || "",
+  );
+  const [selectedPhoneNo, setSelectedPhoneNo] = useState(
+    selectedCustomer?.phone_no || "",
+  );
+
+  const handleCustomerClick = (customer: Customer) => {
+    dispatch({ type: "SET_SELECTED_CUSTOMER", payload: customer });
+    isEditMode(false);
+    setSelectedName(customer.name);
+    setSelectedLocation(customer.location);
+    setSelectedPhoneNo(customer.phone_no);
+  };
+
+  const handleSave = async () => {
+    const trimmedPhoneNo = selectedPhoneNo.trim();
+
+    if (!trimmedPhoneNo.startsWith("07") || trimmedPhoneNo.length !== 10) {
+      alert("Phone number must start with '07' and be exactly 10 digits long.");
+
+      return;
+    }
+
+    if (selectedName.trim() === "") {
+      alert("Customer name cannot be empty.");
+
+      return;
+    }
+
+    const updatedCustomer: Customer = {
+      customer_id: selectedCustomer?.customer_id || 0,
+      name: selectedName,
+      phone_no: selectedPhoneNo.trim(),
+      location: selectedLocation.trim(),
+    };
+
+    try {
+      updateCustomer(updatedCustomer);
+      dispatch({
+        type: "UPDATE_CUSTOMER",
+        payload: updatedCustomer,
+      });
+      isEditMode(false);
+    } catch (error) {}
+  };
+
   // @ts-ignore
   return (
     <div className={"h-full w-full flex flex-row space-x-2 text-black"}>
@@ -117,17 +120,18 @@ const CustomerList: React.FC<CustomerListProps> = ({ onNewCustomerClick }) => {
                 <TableColumn>Customer Name</TableColumn>
                 <TableColumn>Phone No</TableColumn>
                 <TableColumn>Location</TableColumn>
-                <TableColumn>Debt Amount</TableColumn>
                 <TableColumn>Action</TableColumn>
               </TableHeader>
 
               <TableBody>
                 {customerData.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.customerName}</TableCell>
-                    <TableCell>{item.phoneNo}</TableCell>
+                  <TableRow
+                    key={index}
+                    onClick={() => handleCustomerClick(item)}
+                  >
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.phone_no}</TableCell>
                     <TableCell>{item.location}</TableCell>
-                    <TableCell>{item.debtAmount}</TableCell>
                     <TableCell>
                       <Dropdown>
                         <DropdownTrigger>
@@ -139,9 +143,26 @@ const CustomerList: React.FC<CustomerListProps> = ({ onNewCustomerClick }) => {
                           className={"text-black font-baloo"}
                           variant={"flat"}
                         >
-                          <DropdownItem key={"edit"}>Edit</DropdownItem>
-                          <DropdownItem key={"view"}>View</DropdownItem>
-                          <DropdownItem key={"delete"} color="danger">
+                          <DropdownItem
+                            key={"edit"}
+                            onClick={() => {
+                              handleCustomerClick(item);
+                              isEditMode(true);
+                            }}
+                          >
+                            Edit
+                          </DropdownItem>
+                          <DropdownItem
+                            key={"view"}
+                            onClick={() => handleCustomerClick(item)}
+                          >
+                            View
+                          </DropdownItem>
+                          <DropdownItem
+                            key={"delete"}
+                            color="danger"
+                            onClick={() => deleteCustomer(item.customer_id)}
+                          >
                             Delete
                           </DropdownItem>
                         </DropdownMenu>
@@ -159,7 +180,88 @@ const CustomerList: React.FC<CustomerListProps> = ({ onNewCustomerClick }) => {
           "flex-1 border rounded-[20px] shadow-soft shadow-blue-100 w-full h-full"
         }
       >
-        Hello
+        {selectedCustomer ? (
+          <div className={"p-4"}>
+            <div className={"flex flex-row space-x-8 items-center py-10"}>
+              <Image
+                alt={selectedCustomer.name}
+                height={80}
+                src={`/avatars/${selectedCustomer.name.toUpperCase().at(0)}.png`}
+                width={80}
+              />
+              {!editMode ? (
+                <div className={"space-y-1.5"}>
+                  <span className={"font-baloo text-2xl text-black font-bold"}>
+                    {selectedCustomer.name}
+                  </span>
+                  <p className={"font-baloo text-sm text-black font-light"}>
+                    {selectedCustomer.location}
+                  </p>
+                  <p className={"font-baloo text-lg text-black font-medium"}>
+                    {selectedCustomer.phone_no}
+                  </p>
+                </div>
+              ) : (
+                <div className={"flex flex-row items-start justify-between"}>
+                  <div className={"flex flex-col"}>
+                    <input
+                      className={
+                        "outline-none focus:outline-none text-2xl text-black font-baloo font-bold"
+                      }
+                      value={selectedName}
+                      onChange={(e) => setSelectedName(e.target.value)}
+                    />
+                    <input
+                      className={
+                        "outline-none focus:outline-none text-sm text-black"
+                      }
+                      value={selectedLocation}
+                      onChange={(e) => setSelectedLocation(e.target.value)}
+                    />
+                    <input
+                      className={
+                        "outline-none focus:outline-none text-lg font-baloo text-black font-medium w-fit"
+                      }
+                      value={selectedPhoneNo}
+                      onChange={(e) => setSelectedPhoneNo(e.target.value)}
+                    />
+                  </div>
+                  <div className={"flex flex-col space-y-4"}>
+                    <Button
+                      className={"font-baloo font-bold text-small"}
+                      color={"primary"}
+                      size={"sm"}
+                      variant={"solid"}
+                      onClick={() => handleSave()}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className={"font-baloo text-small font-bold"}
+                      color={"danger"}
+                      size={"sm"}
+                      variant={"light"}
+                      onClick={() => isEditMode(false)}
+                    >
+                      Discard
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className={" bg-slate-200 w-full h-[1px]"} />
+            <div className="mt-6">
+              <h3 className="font-bold text-lg">Transaction History</h3>
+              {/* Add logic to fetch and display transaction history here */}
+              {/* You could render a table or list of transactions */}
+              <p>Transaction data goes here...</p>
+            </div>
+          </div>
+        ) : (
+          <div className={"flex flex-col items-center justify-center w-full h-full"}>
+            <p className="text-gray-500">No customer selected</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -304,7 +406,6 @@ const CustomerPage: React.FC = () => {
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([
     { label: "Customers", component: "list" },
   ]);
-
   const handleBreadcrumbClick = (component: string) => {
     setActiveComponent(component);
 
@@ -343,26 +444,24 @@ const CustomerPage: React.FC = () => {
   };
 
   return (
-    <CustomerProvider>
-      <div className="h-screen w-full grid grid-cols-10 grid-rows-[auto_1fr_auto]">
-        <div className={"col-start-1 row-start-1 col-span-full h-10 p-6"}>
-          <Breadcrumbs>
-            {breadcrumbs.map((breadcrumb, index) => (
-              <BreadcrumbItem
-                key={index}
-                className={"font-baloo font-bold text-2xl cursor-pointer"}
-                onClick={() => handleBreadcrumbClick(breadcrumb.component)}
-              >
-                {breadcrumb.label}
-              </BreadcrumbItem>
-            ))}
-          </Breadcrumbs>
-        </div>
-        <div className={"h-full col-start-1 col-span-full p-6"}>
-          {renderComponent()}
-        </div>
+    <div className="h-screen w-full grid grid-cols-10 grid-rows-[auto_1fr_auto]">
+      <div className={"col-start-1 row-start-1 col-span-full h-10 p-6"}>
+        <Breadcrumbs>
+          {breadcrumbs.map((breadcrumb, index) => (
+            <BreadcrumbItem
+              key={index}
+              className={"font-baloo font-bold text-2xl cursor-pointer"}
+              onClick={() => handleBreadcrumbClick(breadcrumb.component)}
+            >
+              {breadcrumb.label}
+            </BreadcrumbItem>
+          ))}
+        </Breadcrumbs>
       </div>
-    </CustomerProvider>
+      <div className={"h-full col-start-1 col-span-full p-6"}>
+        {renderComponent()}
+      </div>
+    </div>
   );
 };
 

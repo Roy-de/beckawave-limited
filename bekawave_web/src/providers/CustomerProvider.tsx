@@ -29,7 +29,7 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({
       const data: Customer[] = response.data;
 
       dispatch({ type: "SET_CUSTOMERS", payload: data });
-      notificationDispatch({
+      dispatch({
         type: "SET_MESSAGE",
         payload: "Customers fetched successfully",
       });
@@ -78,18 +78,21 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({
   const updateCustomer = useCallback(async (customer: Customer) => {
     try {
       const response = await axios.put(
-        `${BACKEND_URL}customer/update`,
+        `${BACKEND_URL}customers/update`,
         customer,
       );
       const data: Customer = response.data;
 
       dispatch({ type: "UPDATE_CUSTOMER", payload: data });
-      dispatch({
+      notificationDispatch({
         type: "SET_MESSAGE",
         payload: "Customers updated successfully",
       });
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: "Error updating customer" });
+      notificationDispatch({
+        type: "SET_ERROR",
+        payload: "Error updating customer",
+      });
     }
   }, []);
 
@@ -99,14 +102,14 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({
    */
   const deleteCustomer = useCallback(async (id: number) => {
     try {
-      await axios.delete(`${BACKEND_URL}customer/delete/${id}`);
+      await axios.delete(`${BACKEND_URL}customers/delete/${id}`);
       dispatch({ type: "DELETE_CUSTOMER", payload: id });
       dispatch({
         type: "SET_MESSAGE",
         payload: "Customers deleted successfully",
       });
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: "Error deleting customer" });
+      notificationDispatch({ type: "SET_ERROR", payload: "Error deleting customer" });
     }
   }, []);
 

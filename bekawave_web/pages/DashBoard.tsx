@@ -6,6 +6,7 @@ import CustomerPage from "@/pages/CustomerPage";
 import InventoryPage from "@/pages/InventoryPage";
 import StorePage from "@/pages/StorePage";
 import SalesPage from "@/pages/SalesPage";
+import { CustomerProvider } from "@/src/providers/CustomerProvider";
 
 const DashBoard = () => {
   const [active, setActive] = useState<string>("Home");
@@ -16,7 +17,11 @@ const DashBoard = () => {
       case "Sales":
         return <SalesPage />;
       case "Customers":
-        return <CustomerPage />;
+        return (
+          <CustomerProvider>
+            <CustomerPage />
+          </CustomerProvider>
+        );
       case "Inventory":
         return <InventoryPage />;
       case "Stores":
